@@ -89,7 +89,7 @@ function initializeNavigation() {
     initScrollToTop();
     initThemeToggle();
     initAnimations();
-    initTestNavigation();
+    initMobileMenu();
     initTypingAnimation();
 });
 
@@ -177,27 +177,43 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Test navigation function
-function initTestNavigation() {
-    const testButton = document.getElementById('test-nav');
-    if (testButton) {
-        testButton.addEventListener('click', function() {
-            console.log('Test button clicked');
+// Mobile menu functionality
+function initMobileMenu() {
+    const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const mobileMenuLinks = document.querySelectorAll('.mobile-menu__link');
+
+    if (mobileMenuToggle && mobileMenu) {
+        mobileMenuToggle.addEventListener('click', function() {
+            mobileMenu.classList.toggle('active');
             
-            // Test each section
-            const sections = ['about', 'projects', 'skills', 'experience', 'education', 'contact'];
-            sections.forEach((sectionId, index) => {
-                setTimeout(() => {
-                    const section = document.getElementById(sectionId);
-                    if (section) {
-                        console.log(`Testing ${sectionId}:`, section.offsetTop);
-                        window.scrollTo({
-                            top: section.offsetTop - 100,
-                            behavior: 'smooth'
-                        });
-                    }
-                }, index * 1000);
+            // Change icon
+            const icon = this.querySelector('.material-icons');
+            if (icon) {
+                icon.textContent = mobileMenu.classList.contains('active') ? 'close' : 'menu';
+            }
+        });
+
+        // Close menu when clicking on a link
+        mobileMenuLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                mobileMenu.classList.remove('active');
+                const icon = mobileMenuToggle.querySelector('.material-icons');
+                if (icon) {
+                    icon.textContent = 'menu';
+                }
             });
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!mobileMenuToggle.contains(e.target) && !mobileMenu.contains(e.target)) {
+                mobileMenu.classList.remove('active');
+                const icon = mobileMenuToggle.querySelector('.material-icons');
+                if (icon) {
+                    icon.textContent = 'menu';
+                }
+            }
         });
     }
 }
