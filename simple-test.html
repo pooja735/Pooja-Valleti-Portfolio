@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Navigation Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #fff;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+            z-index: 1000;
+        }
+        .nav {
+            display: flex;
+            gap: 20px;
+        }
+        .nav a {
+            color: #333;
+            text-decoration: none;
+            padding: 5px 10px;
+        }
+        .nav a:hover {
+            background: #f0f0f0;
+        }
+        .section {
+            min-height: 100vh;
+            padding: 100px 20px 20px;
+            border: 2px solid #ccc;
+            margin: 20px 0;
+        }
+        #about { background: #e8f5e8; }
+        #projects { background: #e8f0f8; }
+        #skills { background: #f8f0e8; }
+        #experience { background: #f0e8f8; }
+        #education { background: #f8f8e0; }
+        #contact { background: #f0f0f0; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <a href="#about">About</a>
+            <a href="#projects">Projects</a>
+            <a href="#skills">Skills</a>
+            <a href="#experience">Experience</a>
+            <a href="#education">Education</a>
+            <a href="#contact">Contact</a>
+        </nav>
+    </header>
+
+    <section id="about" class="section">
+        <h1>About Section</h1>
+        <p>This is the about section.</p>
+    </section>
+
+    <section id="projects" class="section">
+        <h1>Projects Section</h1>
+        <p>This is the projects section.</p>
+    </section>
+
+    <section id="skills" class="section">
+        <h1>Skills Section</h1>
+        <p>This is the skills section.</p>
+    </section>
+
+    <section id="experience" class="section">
+        <h1>Experience Section</h1>
+        <p>This is the experience section.</p>
+    </section>
+
+    <section id="education" class="section">
+        <h1>Education Section</h1>
+        <p>This is the education section.</p>
+    </section>
+
+    <section id="contact" class="section">
+        <h1>Contact Section</h1>
+        <p>This is the contact section.</p>
+    </section>
+
+    <script>
+        // Simple smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('Link clicked:', this.getAttribute('href'));
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    console.log('Target found:', targetId);
+                    const headerHeight = document.querySelector('.header').offsetHeight;
+                    const targetPosition = targetElement.offsetTop - headerHeight;
+                    
+                    console.log('Header height:', headerHeight);
+                    console.log('Target position:', targetPosition);
+                    
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                } else {
+                    console.log('Target not found:', targetId);
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

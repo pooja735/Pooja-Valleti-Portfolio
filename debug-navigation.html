@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navigation Debug Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #fff;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+            z-index: 1000;
+        }
+        .nav {
+            display: flex;
+            gap: 20px;
+        }
+        .nav a {
+            color: #333;
+            text-decoration: none;
+            padding: 5px 10px;
+        }
+        .nav a:hover {
+            background: #f0f0f0;
+        }
+        .section {
+            min-height: 100vh;
+            padding: 100px 20px 20px;
+            border: 2px solid #ccc;
+            margin: 10px 0;
+        }
+        #about { background: #e8f4f8; }
+        #projects { background: #f8f4e8; }
+        #skills { background: #f4e8f8; }
+        #experience { background: #f8f8e4; }
+        #education { background: #e4f8f8; }
+        #contact { background: #f8e4f8; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <nav class="nav">
+            <a href="#about">About</a>
+            <a href="#projects">Projects</a>
+            <a href="#skills">Skills</a>
+            <a href="#experience">Experience</a>
+            <a href="#education">Education</a>
+            <a href="#contact">Contact</a>
+        </nav>
+    </div>
+
+    <section id="about" class="section">
+        <h1>About Section</h1>
+        <p>This is the about section. It should be visible when you click "About" in the navigation.</p>
+    </section>
+
+    <section id="projects" class="section">
+        <h1>Projects Section</h1>
+        <p>This is the projects section. It should be visible when you click "Projects" in the navigation.</p>
+    </section>
+
+    <section id="skills" class="section">
+        <h1>Skills Section</h1>
+        <p>This is the skills section. It should be visible when you click "Skills" in the navigation.</p>
+    </section>
+
+    <section id="experience" class="section">
+        <h1>Experience Section</h1>
+        <p>This is the experience section. It should be visible when you click "Experience" in the navigation.</p>
+    </section>
+
+    <section id="education" class="section">
+        <h1>Education Section</h1>
+        <p>This is the education section. It should be visible when you click "Education" in the navigation.</p>
+    </section>
+
+    <section id="contact" class="section">
+        <h1>Contact Section</h1>
+        <p>This is the contact section. It should be visible when you click "Contact" in the navigation.</p>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('a[href^="#"]');
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    console.log('Clicked:', this.getAttribute('href'));
+                    
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    
+                    if (targetElement) {
+                        console.log('Found element:', targetId);
+                        const headerHeight = document.querySelector('.header').offsetHeight;
+                        const targetPosition = targetElement.offsetTop - headerHeight - 20;
+                        
+                        window.scrollTo({
+                            top: Math.max(0, targetPosition),
+                            behavior: 'smooth'
+                        });
+                    } else {
+                        console.log('Element not found:', targetId);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html> 

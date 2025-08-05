@@ -13,7 +13,7 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto; /* Explicitly set to auto to avoid conflicts */
 }
 
 body {
@@ -109,14 +109,14 @@ main {
   max-width: 1200px;
   width: 90%;
   margin: 0 auto;
-  padding: 2rem 0;
-  padding-top: 6rem;
+  padding: 1rem 0;
+  padding-top: 1rem;
   position: relative;
   z-index: 1;
 }
 
 .section {
-  margin-top: 6rem;
+  margin-top: 3rem;
   padding: 3rem 0;
   position: relative;
   z-index: 1;
@@ -196,6 +196,57 @@ main {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  display: inline-block;
+  min-width: 0;
+}
+
+/* Beautiful Glowing Name Animation */
+.name-glow {
+  position: relative;
+  display: inline-block;
+  background: linear-gradient(135deg, var(--clr-primary), var(--clr-accent), var(--clr-primary));
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: nameGlow 3s ease-in-out infinite, nameFadeIn 2s ease-out forwards;
+  filter: drop-shadow(0 0 10px rgba(102, 126, 234, 0.3));
+}
+
+@keyframes nameGlow {
+  0%, 100% {
+    background-position: 0% 50%;
+    filter: drop-shadow(0 0 10px rgba(102, 126, 234, 0.3));
+  }
+  50% {
+    background-position: 100% 50%;
+    filter: drop-shadow(0 0 20px rgba(102, 126, 234, 0.6));
+  }
+}
+
+@keyframes nameFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Alternative: Bounce and Glow Effect */
+.name-glow:hover {
+  animation: nameBounce 0.6s ease-in-out, nameGlow 3s ease-in-out infinite;
+}
+
+@keyframes nameBounce {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
 }
 
 .hero-role {
@@ -306,6 +357,11 @@ main {
   
   .hero-title {
     font-size: 2.5rem;
+  }
+  
+  .name-glow {
+    display: inline-block;
+    text-align: center;
   }
   
   .hero-role {

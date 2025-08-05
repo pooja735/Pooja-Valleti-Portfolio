@@ -1,16 +1,132 @@
-// Main JavaScript functionality
+// Simple and reliable navigation system
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize all functionality
-    initAnimations();
-    initScrollToTop();
-    initSmoothScrolling();
-    initParallaxEffects();
-    initActiveNavigation();
-    initTypingEffect();
-    initParticleEffects();
+    console.log('DOM loaded, initializing navigation...');
+    
+    // Wait a bit for all elements to be properly rendered
+    setTimeout(() => {
+        initializeNavigation();
+    }, 100);
 });
 
-// Animation initialization
+function initializeNavigation() {
+    // Simple smooth scrolling for navigation links
+    const navLinks = document.querySelectorAll('a[href^="#"]');
+    console.log('Found navigation links:', navLinks.length);
+    
+    navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('Navigation link clicked:', this.getAttribute('href'));
+            
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+            
+            if (targetElement) {
+                console.log('Target element found:', targetId);
+                console.log('Target element position:', targetElement.offsetTop);
+                
+                // Get header height
+                const header = document.querySelector('.header');
+                const headerHeight = header ? header.offsetHeight : 0;
+                console.log('Header height:', headerHeight);
+                
+                // Calculate target position with more offset
+                const targetPosition = targetElement.offsetTop - headerHeight - 30;
+                console.log('Target position:', targetPosition);
+                
+                // Scroll to target
+                window.scrollTo({
+                    top: Math.max(0, targetPosition),
+                    behavior: 'smooth'
+                });
+                
+                // Fallback for browsers that don't support smooth scrolling
+                if (!window.scrollTo || !window.scrollTo.toString().includes('smooth')) {
+                    window.scrollTo(0, Math.max(0, targetPosition));
+                }
+                
+                // Update URL hash
+                history.pushState(null, null, targetId);
+                
+                // Add visual feedback
+                this.style.color = 'var(--clr-primary)';
+                setTimeout(() => {
+                    this.style.color = '';
+                }, 1000);
+            } else {
+                console.log('Target element not found:', targetId);
+                // Try to find the element by different methods
+                const allElements = document.querySelectorAll('*');
+                console.log('All elements with IDs:');
+                allElements.forEach(el => {
+                    if (el.id) {
+                        console.log('Element with ID:', el.id, el);
+                    }
+                });
+            }
+        });
+    });
+    
+    // Test if sections exist
+    const sections = ['about', 'projects', 'skills', 'experience', 'education', 'contact'];
+    sections.forEach(sectionId => {
+        const section = document.getElementById(sectionId);
+        console.log(`Section ${sectionId}:`, section ? 'Found' : 'Not found');
+        if (section) {
+            console.log(`Section ${sectionId} position:`, section.offsetTop);
+        }
+    });
+}
+    
+    // Test if sections exist
+    const sections = ['about', 'projects', 'skills', 'experience', 'education', 'contact'];
+    sections.forEach(sectionId => {
+        const section = document.getElementById(sectionId);
+        console.log(`Section ${sectionId}:`, section ? 'Found' : 'Not found');
+    });
+    
+    // Initialize other functionality
+    initScrollToTop();
+    initThemeToggle();
+    initAnimations();
+    initTestNavigation();
+    initTypingAnimation();
+});
+
+// Scroll to top functionality
+function initScrollToTop() {
+    const scrollTopButton = document.getElementById('scroll-top');
+    
+    if (scrollTopButton) {
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                scrollTopButton.classList.add('visible');
+            } else {
+                scrollTopButton.classList.remove('visible');
+            }
+        });
+    }
+}
+
+// Theme toggle functionality
+function initThemeToggle() {
+    const themeToggle = document.getElementById('theme-toggle');
+    const body = document.body;
+    
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark');
+            body.classList.toggle('light');
+            
+            const icon = themeToggle.querySelector('.material-icons');
+            if (icon) {
+                icon.textContent = body.classList.contains('dark') ? 'light_mode' : 'dark_mode';
+            }
+        });
+    }
+}
+
+// Simple animations
 function initAnimations() {
     // Intersection Observer for scroll-triggered animations
     const observerOptions = {
@@ -34,141 +150,6 @@ function initAnimations() {
     animatedElements.forEach(el => {
         observer.observe(el);
     });
-
-    // Text reveal animation
-    const textRevealElements = document.querySelectorAll('.text-reveal');
-    textRevealElements.forEach(el => {
-        // Wrap text content in spans for animation
-        const text = el.textContent;
-        el.innerHTML = `<span>${text}</span>`;
-        
-        // Trigger animation after a short delay
-        setTimeout(() => {
-            el.classList.add('visible');
-        }, 500);
-    });
-
-    // Staggered animations for skills
-    const skillItems = document.querySelectorAll('.skill-item');
-    skillItems.forEach((item, index) => {
-        setTimeout(() => {
-            item.classList.add('visible');
-        }, index * 100);
-    });
-}
-
-// Scroll to top functionality
-function initScrollToTop() {
-    const scrollTopButton = document.getElementById('scroll-top');
-    
-    if (scrollTopButton) {
-        window.addEventListener('scroll', () => {
-            if (window.pageYOffset > 300) {
-                scrollTopButton.classList.add('visible');
-            } else {
-                scrollTopButton.classList.remove('visible');
-            }
-        });
-    }
-}
-
-// Smooth scrolling for navigation links
-function initSmoothScrolling() {
-    const navLinks = document.querySelectorAll('a[href^="#"]');
-    
-    navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            const targetId = this.getAttribute('href');
-            const targetElement = document.querySelector(targetId);
-            
-            if (targetElement) {
-                const headerHeight = document.querySelector('.header').offsetHeight;
-                const targetPosition = targetElement.offsetTop - headerHeight - 20;
-                
-                window.scrollTo({
-                    top: targetPosition,
-                    behavior: 'smooth'
-                });
-            }
-        });
-    });
-}
-
-// Parallax effects
-function initParallaxEffects() {
-    window.addEventListener('scroll', function() {
-        const scrolled = window.pageYOffset;
-        const parallaxElements = document.querySelectorAll('.floating-element, .floating-shape');
-        
-        parallaxElements.forEach((element, index) => {
-            const speed = 0.5 + (index * 0.1);
-            const yPos = -(scrolled * speed);
-            element.style.transform = `translateY(${yPos}px) rotate(${scrolled * 0.1}deg)`;
-        });
-    });
-}
-
-// Active navigation highlighting
-function initActiveNavigation() {
-    const sections = document.querySelectorAll('section[id]');
-    const navLinks = document.querySelectorAll('.link--nav');
-    
-    window.addEventListener('scroll', function() {
-        let current = '';
-        
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            const sectionHeight = section.clientHeight;
-            
-            if (window.pageYOffset >= sectionTop - 200) {
-                current = section.getAttribute('id');
-            }
-        });
-        
-        navLinks.forEach(link => {
-            link.classList.remove('active');
-            if (link.getAttribute('href') === `#${current}`) {
-                link.classList.add('active');
-            }
-        });
-    });
-}
-
-// Typing effect for hero title
-function initTypingEffect() {
-    const heroTitle = document.querySelector('.hero-title');
-    if (heroTitle) {
-        const text = heroTitle.textContent;
-        heroTitle.innerHTML = '';
-        
-        let i = 0;
-        const typeWriter = () => {
-            if (i < text.length) {
-                heroTitle.innerHTML += text.charAt(i);
-                i++;
-                setTimeout(typeWriter, 100);
-            }
-        };
-        
-        setTimeout(typeWriter, 1000);
-    }
-}
-
-// Particle effects
-function initParticleEffects() {
-    const background = document.querySelector('.animated-background');
-    
-    // Create additional floating particles
-    for (let i = 0; i < 5; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'floating-element';
-        particle.style.left = Math.random() * 100 + '%';
-        particle.style.top = Math.random() * 100 + '%';
-        particle.style.animationDelay = Math.random() * 5 + 's';
-        background.appendChild(particle);
-    }
 }
 
 // Scroll to top function
@@ -196,6 +177,47 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// Test navigation function
+function initTestNavigation() {
+    const testButton = document.getElementById('test-nav');
+    if (testButton) {
+        testButton.addEventListener('click', function() {
+            console.log('Test button clicked');
+            
+            // Test each section
+            const sections = ['about', 'projects', 'skills', 'experience', 'education', 'contact'];
+            sections.forEach((sectionId, index) => {
+                setTimeout(() => {
+                    const section = document.getElementById(sectionId);
+                    if (section) {
+                        console.log(`Testing ${sectionId}:`, section.offsetTop);
+                        window.scrollTo({
+                            top: section.offsetTop - 100,
+                            behavior: 'smooth'
+                        });
+                    }
+                }, index * 1000);
+            });
+        });
+    }
+}
+
+// Beautiful name animation
+function initTypingAnimation() {
+    const nameElement = document.querySelector('.name-glow');
+    if (nameElement) {
+        // Add a subtle entrance effect
+        nameElement.style.opacity = '0';
+        nameElement.style.transform = 'translateY(20px) scale(0.9)';
+        
+        setTimeout(() => {
+            nameElement.style.transition = 'all 1.5s ease-out';
+            nameElement.style.opacity = '1';
+            nameElement.style.transform = 'translateY(0) scale(1)';
+        }, 500);
+    }
+}
+
 // Loading animation
 window.addEventListener('load', function() {
     document.body.classList.add('loaded');
@@ -208,105 +230,3 @@ window.addEventListener('load', function() {
         }, index * 200);
     });
 });
-
-// Add ripple effect to buttons
-document.addEventListener('DOMContentLoaded', function() {
-    const buttons = document.querySelectorAll('.btn');
-    
-    buttons.forEach(button => {
-        button.addEventListener('click', function(e) {
-            const ripple = document.createElement('span');
-            const rect = this.getBoundingClientRect();
-            const size = Math.max(rect.width, rect.height);
-            const x = e.clientX - rect.left - size / 2;
-            const y = e.clientY - rect.top - size / 2;
-            
-            ripple.style.width = ripple.style.height = size + 'px';
-            ripple.style.left = x + 'px';
-            ripple.style.top = y + 'px';
-            ripple.classList.add('ripple');
-            
-            this.appendChild(ripple);
-            
-            setTimeout(() => {
-                ripple.remove();
-            }, 600);
-        });
-    });
-});
-
-// Add scroll progress indicator
-document.addEventListener('DOMContentLoaded', function() {
-    const progressBar = document.createElement('div');
-    progressBar.className = 'scroll-progress';
-    progressBar.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 0%;
-        height: 3px;
-        background: linear-gradient(90deg, var(--clr-primary), var(--clr-accent));
-        z-index: 1001;
-        transition: width 0.1s ease;
-    `;
-    
-    document.body.appendChild(progressBar);
-    
-    window.addEventListener('scroll', function() {
-        const scrolled = (window.pageYOffset / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
-        progressBar.style.width = scrolled + '%';
-    });
-});
-
-// Add keyboard navigation
-document.addEventListener('keydown', function(e) {
-    // Escape key to close modals or return to top
-    if (e.key === 'Escape') {
-        scrollToTop();
-    }
-});
-
-// Add touch gestures for mobile
-let touchStartX = 0;
-let touchEndX = 0;
-
-document.addEventListener('touchstart', function(e) {
-    touchStartX = e.changedTouches[0].screenX;
-});
-
-document.addEventListener('touchend', function(e) {
-    touchEndX = e.changedTouches[0].screenX;
-    handleSwipe();
-});
-
-function handleSwipe() {
-    const swipeThreshold = 50;
-    const diff = touchStartX - touchEndX;
-    
-    if (Math.abs(diff) > swipeThreshold) {
-        if (diff > 0) {
-            // Swipe left - could be used for navigation
-            console.log('Swiped left');
-        } else {
-            // Swipe right - could be used for navigation
-            console.log('Swiped right');
-        }
-    }
-}
-
-// Performance optimization
-let ticking = false;
-
-function updateAnimations() {
-    // Update any performance-heavy animations here
-    ticking = false;
-}
-
-function requestTick() {
-    if (!ticking) {
-        requestAnimationFrame(updateAnimations);
-        ticking = true;
-    }
-}
-
-window.addEventListener('scroll', requestTick);

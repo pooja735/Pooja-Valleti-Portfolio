@@ -6,7 +6,6 @@
     <title>Pooja Valleti - Portfolio</title>
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/components.css">
-    <link rel="stylesheet" href="styles/animations.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <meta name="theme-color" content="#f8f4ff">
@@ -37,15 +36,18 @@
                     <button id="theme-toggle" class="btn btn--icon">
                         <span class="material-icons">dark_mode</span>
                     </button>
+                    <button id="test-nav" class="btn btn--icon" style="margin-left: 10px;">
+                        <span class="material-icons">test</span>
+                    </button>
                 </nav>
             </div>
         </header>
 
-        <!-- Hero Section with SVG Wave -->
-        <section class="hero-section">
+        <!-- About Section (Hero) -->
+        <section class="hero-section" id="about">
             <div class="hero-content">
                 <div class="hero-intro">
-                    <h1 class="hero-title text-reveal">Hi, I'm <span class="highlight">Pooja Valleti</span></h1>
+                    <h1 class="hero-title text-reveal">Hi, I'm <span class="highlight name-glow">Pooja Valleti</span></h1>
                     <h2 class="hero-role text-reveal">AI & ML Engineer | Python Developer | MERN Stack Developer</h2>
                     <p class="hero-desc text-reveal">AI and Full Stack Developer passionate about solving real-world problems using technology. Experienced in building intelligent applications, virtual interfaces, and scalable web platforms. Enthusiastic about learning and applying ML and system design.</p>
                     <div class="hero-actions">
@@ -75,8 +77,6 @@
         </section>
 
         <main>
-            <!-- About Section (kept for anchor, but content is in hero) -->
-            <section class="about fade-in-on-scroll" id="about"></section>
 
             <!-- Projects Section -->
             <section id="projects" class="section projects fade-in-on-scroll">
@@ -276,13 +276,12 @@
         <!-- Footer -->
         <footer class="footer">
             <div class="footer__container">
-                <p>&copy; 2024 Pooja Valleti. All rights reserved.</p>
+                <p>&copy; 2025 Pooja Valleti. All rights reserved.</p>
             </div>
         </footer>
     </div>
 
     <script src="js/main.js"></script>
-    <script src="js/animations.js"></script>
     <script src="js/theme.js"></script>
 </body>
 </html>
