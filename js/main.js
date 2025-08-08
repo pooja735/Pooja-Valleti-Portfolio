@@ -5,6 +5,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Wait a bit for all elements to be properly rendered
     setTimeout(() => {
         initializeNavigation();
+        initScrollToTop();
+        initThemeToggle();
+        initAnimations();
+        initMobileMenu();
+        initTypingAnimation();
     }, 100);
 });
 
@@ -77,21 +82,6 @@ function initializeNavigation() {
         }
     });
 }
-    
-    // Test if sections exist
-    const sections = ['about', 'projects', 'skills', 'experience', 'education', 'contact'];
-    sections.forEach(sectionId => {
-        const section = document.getElementById(sectionId);
-        console.log(`Section ${sectionId}:`, section ? 'Found' : 'Not found');
-    });
-    
-    // Initialize other functionality
-    initScrollToTop();
-    initThemeToggle();
-    initAnimations();
-    initMobileMenu();
-    initTypingAnimation();
-});
 
 // Scroll to top functionality
 function initScrollToTop() {
@@ -179,13 +169,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Mobile menu functionality
 function initMobileMenu() {
+    console.log('Initializing mobile menu...');
     const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
     const mobileMenu = document.getElementById('mobile-menu');
     const mobileMenuLinks = document.querySelectorAll('.mobile-menu__link');
 
+    console.log('Mobile menu toggle:', mobileMenuToggle);
+    console.log('Mobile menu:', mobileMenu);
+    console.log('Mobile menu links:', mobileMenuLinks.length);
+
     if (mobileMenuToggle && mobileMenu) {
-        mobileMenuToggle.addEventListener('click', function() {
+        mobileMenuToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Mobile menu toggle clicked');
+            
             mobileMenu.classList.toggle('active');
+            console.log('Mobile menu active:', mobileMenu.classList.contains('active'));
             
             // Change icon
             const icon = this.querySelector('.material-icons');
@@ -196,7 +196,8 @@ function initMobileMenu() {
 
         // Close menu when clicking on a link
         mobileMenuLinks.forEach(link => {
-            link.addEventListener('click', function() {
+            link.addEventListener('click', function(e) {
+                console.log('Mobile menu link clicked:', this.getAttribute('href'));
                 mobileMenu.classList.remove('active');
                 const icon = mobileMenuToggle.querySelector('.material-icons');
                 if (icon) {
@@ -215,6 +216,8 @@ function initMobileMenu() {
                 }
             }
         });
+    } else {
+        console.error('Mobile menu elements not found!');
     }
 }
 
