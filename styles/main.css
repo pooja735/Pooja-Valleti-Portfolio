@@ -13,7 +13,8 @@
 }
 
 html {
-  scroll-behavior: auto; /* Explicitly set to auto to avoid conflicts */
+  scroll-behavior: smooth;
+  scroll-padding-top: 100px; /* Add padding for fixed header */
 }
 
 body {

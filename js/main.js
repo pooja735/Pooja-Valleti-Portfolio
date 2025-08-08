@@ -2,22 +2,20 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM loaded, initializing navigation...');
     
-    // Wait a bit for all elements to be properly rendered
-    setTimeout(() => {
-        initializeNavigation();
-        initScrollToTop();
-        initThemeToggle();
-        initAnimations();
-        initMobileMenu();
-        initTypingAnimation();
-    }, 100);
+    // Initialize everything
+    initNavigation();
+    initMobileMenu();
+    initScrollToTop();
+    initThemeToggle();
+    initAnimations();
+    initTypingAnimation();
 });
 
-function initializeNavigation() {
-    // Test all sections first
-    testSections();
+// Simple navigation function
+function initNavigation() {
+    console.log('Initializing navigation...');
     
-    // Simple smooth scrolling for navigation links
+    // Get all navigation links
     const navLinks = document.querySelectorAll('a[href^="#"]');
     console.log('Found navigation links:', navLinks.length);
     
@@ -25,76 +23,76 @@ function initializeNavigation() {
         link.addEventListener('click', function(e) {
             e.preventDefault();
             const targetId = this.getAttribute('href');
-            console.log('Navigation link clicked:', targetId);
+            console.log('Clicked:', targetId);
             
-            // Simple scroll to section
-            scrollToSection(targetId);
-            
-            // Add visual feedback
-            this.style.color = 'var(--clr-primary)';
-            setTimeout(() => {
-                this.style.color = '';
-            }, 1000);
+            // Simple scroll to element
+            const targetElement = document.getElementById(targetId.substring(1));
+            if (targetElement) {
+                console.log('Found target:', targetElement);
+                targetElement.scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            } else {
+                console.log('Target not found:', targetId);
+            }
         });
     });
 }
 
-function testSections() {
-    const sections = ['about', 'projects', 'skills', 'experience', 'education', 'contact'];
-    console.log('Testing sections...');
-    
-    sections.forEach(sectionId => {
-        const section = document.getElementById(sectionId);
-        if (section) {
-            console.log(`✓ Section ${sectionId} found at offsetTop: ${section.offsetTop}`);
-        } else {
-            console.log(`✗ Section ${sectionId} NOT FOUND`);
-        }
-    });
-}
+// Mobile menu functionality
+function initMobileMenu() {
+    console.log('Initializing mobile menu...');
+    const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const mobileMenuLinks = document.querySelectorAll('.mobile-menu__link');
 
-function scrollToSection(targetId) {
-    const targetElement = document.querySelector(targetId);
-    
-    if (targetElement) {
-        console.log('Scrolling to:', targetId);
-        console.log('Target element found:', targetElement);
-        console.log('Target offsetTop:', targetElement.offsetTop);
-        
-        // Get header height
-        const header = document.querySelector('.header');
-        const headerHeight = header ? header.offsetHeight : 80;
-        console.log('Header height:', headerHeight);
-        
-        // Calculate position
-        let scrollPosition;
-        
-        if (targetId === '#about') {
-            scrollPosition = 0;
-        } else {
-            scrollPosition = targetElement.offsetTop - headerHeight - 20;
-        }
-        
-        // Ensure positive value
-        scrollPosition = Math.max(0, scrollPosition);
-        
-        console.log('Scroll position:', scrollPosition);
-        
-        // Smooth scroll
-        window.scrollTo({
-            top: scrollPosition,
-            behavior: 'smooth'
+    if (mobileMenuToggle && mobileMenu) {
+        // Toggle mobile menu
+        mobileMenuToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            mobileMenu.classList.toggle('active');
+            
+            // Change icon
+            const icon = this.querySelector('.material-icons');
+            if (icon) {
+                icon.textContent = mobileMenu.classList.contains('active') ? 'close' : 'menu';
+            }
         });
-        
-        // Update URL
-        history.pushState(null, null, targetId);
-    } else {
-        console.log('Target not found:', targetId);
-        // List all sections to debug
-        const allSections = document.querySelectorAll('section[id]');
-        console.log('Available sections:');
-        allSections.forEach(section => {
-            console.log('-', section.id, section);
+
+        // Handle mobile menu links
+        mobileMenuLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                const targetId = this.getAttribute('href');
+                console.log('Mobile menu clicked:', targetId);
+                
+                // Scroll to target
+                const targetElement = document.getElementById(targetId.substring(1));
+                if (targetElement) {
+                    targetElement.scrollIntoView({ 
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+                
+                // Close mobile menu
+                mobileMenu.classList.remove('active');
+                const icon = mobileMenuToggle.querySelector('.material-icons');
+                if (icon) {
+                    icon.textContent = 'menu';
+                }
+            });
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!mobileMenuToggle.contains(e.target) && !mobileMenu.contains(e.target)) {
+                mobileMenu.classList.remove('active');
+                const icon = mobileMenuToggle.querySelector('.material-icons');
+                if (icon) {
+                    icon.textContent = 'menu';
+                }
+            }
         });
     }
 }
@@ -182,62 +180,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
-
-// Mobile menu functionality
-function initMobileMenu() {
-    console.log('Initializing mobile menu...');
-    const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
-    const mobileMenu = document.getElementById('mobile-menu');
-    const mobileMenuLinks = document.querySelectorAll('.mobile-menu__link');
-
-    if (mobileMenuToggle && mobileMenu) {
-        mobileMenuToggle.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            console.log('Mobile menu toggle clicked');
-            
-            mobileMenu.classList.toggle('active');
-            console.log('Mobile menu active:', mobileMenu.classList.contains('active'));
-            
-            // Change icon
-            const icon = this.querySelector('.material-icons');
-            if (icon) {
-                icon.textContent = mobileMenu.classList.contains('active') ? 'close' : 'menu';
-            }
-        });
-
-        // Close menu when clicking on a link
-        mobileMenuLinks.forEach(link => {
-            link.addEventListener('click', function(e) {
-                const targetId = this.getAttribute('href');
-                console.log('Mobile menu link clicked:', targetId);
-                
-                // Scroll to section
-                scrollToSection(targetId);
-                
-                // Close mobile menu
-                mobileMenu.classList.remove('active');
-                const icon = mobileMenuToggle.querySelector('.material-icons');
-                if (icon) {
-                    icon.textContent = 'menu';
-                }
-            });
-        });
-
-        // Close menu when clicking outside
-        document.addEventListener('click', function(e) {
-            if (!mobileMenuToggle.contains(e.target) && !mobileMenu.contains(e.target)) {
-                mobileMenu.classList.remove('active');
-                const icon = mobileMenuToggle.querySelector('.material-icons');
-                if (icon) {
-                    icon.textContent = 'menu';
-                }
-            }
-        });
-    } else {
-        console.error('Mobile menu elements not found!');
-    }
-}
 
 // Beautiful name animation
 function initTypingAnimation() {
