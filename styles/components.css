@@ -23,6 +23,7 @@
   padding: 0.5rem;
   border-radius: var(--border-radius);
   transition: var(--transition);
+  z-index: 1000;
 }
 
 .mobile-menu-toggle:hover {
@@ -44,6 +45,7 @@
   transform: translateY(-100%);
   opacity: 0;
   transition: all 0.3s ease;
+  z-index: 999;
 }
 
 .dark .mobile-menu {
@@ -52,9 +54,10 @@
 }
 
 .mobile-menu.active {
-  display: block;
+  display: block !important;
   transform: translateY(0);
   opacity: 1;
+  visibility: visible;
 }
 
 .mobile-menu__link {
@@ -65,6 +68,7 @@
   font-weight: 600;
   transition: var(--transition);
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  cursor: pointer;
 }
 
 .dark .mobile-menu__link {
