@@ -52,6 +52,7 @@
 }
 
 .mobile-menu.active {
+  display: block;
   transform: translateY(0);
   opacity: 1;
 }
@@ -884,6 +885,10 @@
   }
 
   .mobile-menu {
+    display: none;
+  }
+  
+  .mobile-menu.active {
     display: block;
   }
   
