@@ -120,6 +120,7 @@ main {
   padding: 3rem 0;
   position: relative;
   z-index: 1;
+  scroll-margin-top: 100px; /* Add scroll margin for smooth scrolling */
 }
 
 .section:first-of-type {
@@ -166,6 +167,7 @@ main {
   position: relative;
   padding: 6rem 0 4rem 0;
   overflow: hidden;
+  scroll-margin-top: 100px; /* Add scroll margin for smooth scrolling */
 }
 
 .hero-content {

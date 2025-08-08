@@ -28,27 +28,36 @@ function initializeNavigation() {
             
             if (targetElement) {
                 console.log('Target element found:', targetId);
-                console.log('Target element position:', targetElement.offsetTop);
+                console.log('Target element offsetTop:', targetElement.offsetTop);
+                console.log('Current scroll position:', window.pageYOffset);
                 
                 // Get header height
                 const header = document.querySelector('.header');
-                const headerHeight = header ? header.offsetHeight : 0;
+                const headerHeight = header ? header.offsetHeight : 80; // Default to 80px if header not found
                 console.log('Header height:', headerHeight);
                 
-                // Calculate target position with more offset
-                const targetPosition = targetElement.offsetTop - headerHeight - 30;
-                console.log('Target position:', targetPosition);
+                // Calculate scroll position
+                let targetPosition;
                 
-                // Scroll to target
+                if (targetId === '#about') {
+                    // For about section (hero), scroll to top
+                    targetPosition = 0;
+                } else {
+                    // For other sections, calculate position
+                    targetPosition = targetElement.offsetTop - headerHeight - 20;
+                }
+                
+                console.log('Calculated target position:', targetPosition);
+                
+                // Ensure we don't scroll to negative values
+                targetPosition = Math.max(0, targetPosition);
+                console.log('Final target position:', targetPosition);
+                
+                // Scroll to target with smooth behavior
                 window.scrollTo({
-                    top: Math.max(0, targetPosition),
+                    top: targetPosition,
                     behavior: 'smooth'
                 });
-                
-                // Fallback for browsers that don't support smooth scrolling
-                if (!window.scrollTo || !window.scrollTo.toString().includes('smooth')) {
-                    window.scrollTo(0, Math.max(0, targetPosition));
-                }
                 
                 // Update URL hash
                 history.pushState(null, null, targetId);
@@ -60,14 +69,6 @@ function initializeNavigation() {
                 }, 1000);
             } else {
                 console.log('Target element not found:', targetId);
-                // Try to find the element by different methods
-                const allElements = document.querySelectorAll('*');
-                console.log('All elements with IDs:');
-                allElements.forEach(el => {
-                    if (el.id) {
-                        console.log('Element with ID:', el.id, el);
-                    }
-                });
             }
         });
     });
@@ -78,7 +79,7 @@ function initializeNavigation() {
         const section = document.getElementById(sectionId);
         console.log(`Section ${sectionId}:`, section ? 'Found' : 'Not found');
         if (section) {
-            console.log(`Section ${sectionId} position:`, section.offsetTop);
+            console.log(`Section ${sectionId} offsetTop:`, section.offsetTop);
         }
     });
 }
@@ -198,6 +199,43 @@ function initMobileMenu() {
         mobileMenuLinks.forEach(link => {
             link.addEventListener('click', function(e) {
                 console.log('Mobile menu link clicked:', this.getAttribute('href'));
+                
+                // Get the target section
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    console.log('Mobile menu - Target element found:', targetId);
+                    
+                    // Get header height
+                    const header = document.querySelector('.header');
+                    const headerHeight = header ? header.offsetHeight : 80;
+                    
+                    // Calculate scroll position
+                    let targetPosition;
+                    
+                    if (targetId === '#about') {
+                        // For about section (hero), scroll to top
+                        targetPosition = 0;
+                    } else {
+                        // For other sections, calculate position
+                        targetPosition = targetElement.offsetTop - headerHeight - 20;
+                    }
+                    
+                    // Ensure we don't scroll to negative values
+                    targetPosition = Math.max(0, targetPosition);
+                    
+                    // Scroll to target
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Update URL hash
+                    history.pushState(null, null, targetId);
+                }
+                
+                // Close mobile menu
                 mobileMenu.classList.remove('active');
                 const icon = mobileMenuToggle.querySelector('.material-icons');
                 if (icon) {
