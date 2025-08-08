@@ -14,6 +14,9 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function initializeNavigation() {
+    // Test all sections first
+    testSections();
+    
     // Simple smooth scrolling for navigation links
     const navLinks = document.querySelectorAll('a[href^="#"]');
     console.log('Found navigation links:', navLinks.length);
@@ -21,67 +24,79 @@ function initializeNavigation() {
     navLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
-            console.log('Navigation link clicked:', this.getAttribute('href'));
-            
             const targetId = this.getAttribute('href');
-            const targetElement = document.querySelector(targetId);
+            console.log('Navigation link clicked:', targetId);
             
-            if (targetElement) {
-                console.log('Target element found:', targetId);
-                console.log('Target element offsetTop:', targetElement.offsetTop);
-                console.log('Current scroll position:', window.pageYOffset);
-                
-                // Get header height
-                const header = document.querySelector('.header');
-                const headerHeight = header ? header.offsetHeight : 80; // Default to 80px if header not found
-                console.log('Header height:', headerHeight);
-                
-                // Calculate scroll position
-                let targetPosition;
-                
-                if (targetId === '#about') {
-                    // For about section (hero), scroll to top
-                    targetPosition = 0;
-                } else {
-                    // For other sections, calculate position
-                    targetPosition = targetElement.offsetTop - headerHeight - 20;
-                }
-                
-                console.log('Calculated target position:', targetPosition);
-                
-                // Ensure we don't scroll to negative values
-                targetPosition = Math.max(0, targetPosition);
-                console.log('Final target position:', targetPosition);
-                
-                // Scroll to target with smooth behavior
-                window.scrollTo({
-                    top: targetPosition,
-                    behavior: 'smooth'
-                });
-                
-                // Update URL hash
-                history.pushState(null, null, targetId);
-                
-                // Add visual feedback
-                this.style.color = 'var(--clr-primary)';
-                setTimeout(() => {
-                    this.style.color = '';
-                }, 1000);
-            } else {
-                console.log('Target element not found:', targetId);
-            }
+            // Simple scroll to section
+            scrollToSection(targetId);
+            
+            // Add visual feedback
+            this.style.color = 'var(--clr-primary)';
+            setTimeout(() => {
+                this.style.color = '';
+            }, 1000);
         });
     });
-    
-    // Test if sections exist
+}
+
+function testSections() {
     const sections = ['about', 'projects', 'skills', 'experience', 'education', 'contact'];
+    console.log('Testing sections...');
+    
     sections.forEach(sectionId => {
         const section = document.getElementById(sectionId);
-        console.log(`Section ${sectionId}:`, section ? 'Found' : 'Not found');
         if (section) {
-            console.log(`Section ${sectionId} offsetTop:`, section.offsetTop);
+            console.log(`✓ Section ${sectionId} found at offsetTop: ${section.offsetTop}`);
+        } else {
+            console.log(`✗ Section ${sectionId} NOT FOUND`);
         }
     });
+}
+
+function scrollToSection(targetId) {
+    const targetElement = document.querySelector(targetId);
+    
+    if (targetElement) {
+        console.log('Scrolling to:', targetId);
+        console.log('Target element found:', targetElement);
+        console.log('Target offsetTop:', targetElement.offsetTop);
+        
+        // Get header height
+        const header = document.querySelector('.header');
+        const headerHeight = header ? header.offsetHeight : 80;
+        console.log('Header height:', headerHeight);
+        
+        // Calculate position
+        let scrollPosition;
+        
+        if (targetId === '#about') {
+            scrollPosition = 0;
+        } else {
+            scrollPosition = targetElement.offsetTop - headerHeight - 20;
+        }
+        
+        // Ensure positive value
+        scrollPosition = Math.max(0, scrollPosition);
+        
+        console.log('Scroll position:', scrollPosition);
+        
+        // Smooth scroll
+        window.scrollTo({
+            top: scrollPosition,
+            behavior: 'smooth'
+        });
+        
+        // Update URL
+        history.pushState(null, null, targetId);
+    } else {
+        console.log('Target not found:', targetId);
+        // List all sections to debug
+        const allSections = document.querySelectorAll('section[id]');
+        console.log('Available sections:');
+        allSections.forEach(section => {
+            console.log('-', section.id, section);
+        });
+    }
 }
 
 // Scroll to top functionality
@@ -175,10 +190,6 @@ function initMobileMenu() {
     const mobileMenu = document.getElementById('mobile-menu');
     const mobileMenuLinks = document.querySelectorAll('.mobile-menu__link');
 
-    console.log('Mobile menu toggle:', mobileMenuToggle);
-    console.log('Mobile menu:', mobileMenu);
-    console.log('Mobile menu links:', mobileMenuLinks.length);
-
     if (mobileMenuToggle && mobileMenu) {
         mobileMenuToggle.addEventListener('click', function(e) {
             e.preventDefault();
@@ -198,42 +209,11 @@ function initMobileMenu() {
         // Close menu when clicking on a link
         mobileMenuLinks.forEach(link => {
             link.addEventListener('click', function(e) {
-                console.log('Mobile menu link clicked:', this.getAttribute('href'));
-                
-                // Get the target section
                 const targetId = this.getAttribute('href');
-                const targetElement = document.querySelector(targetId);
+                console.log('Mobile menu link clicked:', targetId);
                 
-                if (targetElement) {
-                    console.log('Mobile menu - Target element found:', targetId);
-                    
-                    // Get header height
-                    const header = document.querySelector('.header');
-                    const headerHeight = header ? header.offsetHeight : 80;
-                    
-                    // Calculate scroll position
-                    let targetPosition;
-                    
-                    if (targetId === '#about') {
-                        // For about section (hero), scroll to top
-                        targetPosition = 0;
-                    } else {
-                        // For other sections, calculate position
-                        targetPosition = targetElement.offsetTop - headerHeight - 20;
-                    }
-                    
-                    // Ensure we don't scroll to negative values
-                    targetPosition = Math.max(0, targetPosition);
-                    
-                    // Scroll to target
-                    window.scrollTo({
-                        top: targetPosition,
-                        behavior: 'smooth'
-                    });
-                    
-                    // Update URL hash
-                    history.pushState(null, null, targetId);
-                }
+                // Scroll to section
+                scrollToSection(targetId);
                 
                 // Close mobile menu
                 mobileMenu.classList.remove('active');
