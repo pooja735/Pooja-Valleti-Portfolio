@@ -15,6 +15,8 @@ A modern, responsive portfolio website showcasing my skills, projects, and exper
 
 ## 🛠️ Technologies Used
 
+- **React 18** (CDN) + **ReactDOM 18** (CDN)
+- **Babel Standalone** (CDN) for on-the-fly JSX transpilation
 - **HTML5**: Semantic markup
 - **CSS3**: Modern styling with CSS Grid, Flexbox, and custom properties
 - **JavaScript**: Vanilla JS for interactivity and animations
@@ -25,18 +27,19 @@ A modern, responsive portfolio website showcasing my skills, projects, and exper
 
 ```
 Pooja-Valleti-Portfolio/
-├── index.html              # Main HTML file
+├── index.html                  # Loads React/ReactDOM/Babel CDNs + mounts React app
 ├── styles/
-│   ├── main.css           # Main stylesheet
-│   ├── components.css     # Component-specific styles
-│   └── animations.css     # Animation definitions
+│   ├── main.css               # Main stylesheet
+│   ├── components.css         # Component-specific styles
+│   └── animations.css         # Animation definitions
 ├── js/
-│   ├── main.js           # Main JavaScript functionality
-│   └── theme.js          # Theme management
+│   ├── react-app.jsx          # React components and page rendering (Header, Hero, etc.)
+│   ├── main.js                # Existing navigation/animations (still loaded)
+│   └── theme.js               # Existing theme manager (still loaded)
 ├── public/
-│   └── profile-photo.jpg # Profile image
-├── README.md             # Project documentation
-└── .gitignore           # Git ignore file
+│   └── profile-photo.jpg      # Profile image
+├── README.md                  # Project documentation
+└── .gitignore                 # Git ignore file
 ```
 
 ## 🎨 Design Features
@@ -76,8 +79,8 @@ Pooja-Valleti-Portfolio/
    ```
 
 2. **Open in browser**:
-   - Simply open `index.html` in your web browser
-   - Or use a local server:
+   - Simply open `index.html` in your web browser (React is loaded via CDN)
+   - Or use a local server (recommended during development):
      ```bash
      # Using Python
      python -m http.server 8000
@@ -86,11 +89,15 @@ Pooja-Valleti-Portfolio/
      npx serve .
      ```
 
-3. **Customize**:
-   - Update personal information in `index.html`
-   - Modify colors in CSS variables
-   - Add your own projects and skills
+3. **Customize (React)**:
+   - Edit React components in `js/react-app.jsx` (Header, Hero, Projects, Skills, Experience, Education, Contact, Footer)
+   - Keep IDs/classes consistent if you still rely on `js/main.js` animations
+   - Modify colors in CSS variables (`styles/main.css`)
    - Replace profile image in `public/` folder
+
+4. (Optional) Fully migrate behavior to React hooks:
+   - We currently keep `js/main.js` and `js/theme.js` for smooth transition
+   - If you prefer, these can be reimplemented inside React and removed later
 
 ## 🎯 Key Sections
 
@@ -124,25 +131,29 @@ Pooja-Valleti-Portfolio/
 
 ## 🔧 Customization
 
-### Adding New Projects
-```html
-<div class="project glass-card hover-lift">
-    <h3 class="project__title">Your Project Title</h3>
-    <p class="project__description">Project description...</p>
-    <div class="project__stack">
-        <span class="project__stack-item">Technology</span>
+### Adding New Projects (in React JSX)
+Add a new project card inside the `Projects` section in `js/react-app.jsx`:
+```jsx
+<div className="project glass-card hover-lift">
+    <h3 className="project__title">Your Project Title</h3>
+    <p className="project__description">Project description...</p>
+    <div className="project__stack">
+        <span className="project__stack-item">Technology</span>
     </div>
-    <div class="project__links">
-        <a href="your-link" class="link link--icon hover-glow">
-            <!-- GitHub icon -->
+    <div className="project__links">
+        <a href="your-link" className="link link--icon hover-glow" target="_blank" rel="noopener noreferrer">
+            {/* Optional: GitHub SVG icon */}
         </a>
     </div>
 </div>
 ```
 
-### Adding New Skills
-```html
-<div class="skill-item stagger-item">Your Skill</div>
+### Adding New Skills (in React JSX)
+Update the skills array inside the `Skills` section in `js/react-app.jsx`:
+```jsx
+{[...existingSkills, 'Your Skill'].map((s) => (
+    <div key={s} className="skill-item stagger-item">{s}</div>
+))}
 ```
 
 ### Modifying Colors
@@ -153,6 +164,20 @@ Update CSS variables in `styles/main.css`:
     --clr-accent: #your-color;
 }
 ```
+
+## ⚛️ How React is Wired
+
+- `index.html` includes React, ReactDOM, and Babel via CDN, and adds a `<div id="react-root">` inside `#top`.
+- `js/react-app.jsx` mounts a React app into `#react-root` and renders sections (Header/Hero/Projects/etc.).
+- To avoid duplicate content, the React app removes pre-existing static sections at runtime.
+- Existing scripts `js/main.js` and `js/theme.js` still run and target the same IDs/classes.
+
+## ❓ FAQs
+
+- Can I run this without a bundler like Vite or CRA?
+  - Yes. This setup uses CDN + Babel Standalone so you can develop with plain files.
+- How do I migrate all JS to React and remove old scripts?
+  - Move logic from `js/main.js` and `js/theme.js` into React hooks/effects, then remove those files and script tags from `index.html`.
 
 
 ## 🤝 Contributing
